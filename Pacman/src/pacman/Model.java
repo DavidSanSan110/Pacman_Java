@@ -11,7 +11,7 @@ import javax.swing.Timer;
 
 public class Model extends JPanel implements ActionListener {
 
-    //INTENTO DE PRIMER PUSH
+    //INTENTO DE SEGUNDO PUSH
     private Dimension d;
     private final Font smallFont = new Font("Arial", Font.BOLD, 14);
     private boolean inGame = false;
