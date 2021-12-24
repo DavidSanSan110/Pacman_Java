@@ -13,6 +13,7 @@ import java.awt.event.KeyListener;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 import gameobjects.Pacman;
+import java.awt.Font;
 import javax.swing.ImageIcon;
 
 public class GraphicsHandler extends JPanel implements ActionListener {
@@ -29,7 +30,7 @@ public class GraphicsHandler extends JPanel implements ActionListener {
     
     
     
-    private int [] screenData;
+    private int screenData[];
     private final int mapaData[] = {
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
         0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
@@ -80,20 +81,20 @@ public class GraphicsHandler extends JPanel implements ActionListener {
         g2d.fillRect(0, 0, d.width, d.height);
         
         drawMaze(g2d);
-        //drawScore(g2d);
+        drawScore(g2d);
         
         if (!inGame) {
             showIntroScreen(g2d);
         } else {
-            drawPacman(g2d);
-            //playGame(g2d);
+            //drawPacman(g2d);
+            playGame(g2d);
         }
     }
     
     private void playGame(Graphics2D g2d) {
         //movePacman(g2d)
-        //drawPacman(g2d)
-        //pacman.move(screenData);
+        pacman.movePacman(screenData, BLOCK_SIZE, NUM_BLOCKS);
+        drawPacman(g2d);
         //checkScore, checkRequest, checkDirection
     }
     
@@ -119,16 +120,24 @@ public class GraphicsHandler extends JPanel implements ActionListener {
                 g2d.setColor(new Color(113,82,186));
                 g2d.setStroke(new BasicStroke(5));
                 
-                if((mapaData[i]) == 0) {
+                if((screenData[i]) == 0) {
                     g2d.fillRect(x, y, BLOCK_SIZE, BLOCK_SIZE);
                 }
-                if((mapaData[i]) == 1) {
+                if((screenData[i]) == 1) {
                     g2d.setColor(new Color(255,255,255));
                     g2d.fillOval(x + 8, y + 8, 6, 6);
                 }
                 i++;
             }
         }
+    }
+    
+    private void drawScore(Graphics2D g2d) {
+        g2d.setFont(new Font("Arial", Font.BOLD, 12));
+        g2d.setColor(new Color(255, 255, 255));
+        String score = "Score: " + pacman.getScore();
+        g2d.drawString(score, SCREEN_SIZE / 2 + 96, SCREEN_SIZE + 16);
+        //Lives
     }
     
     private void showIntroScreen(Graphics2D g2d) {
@@ -153,17 +162,17 @@ public class GraphicsHandler extends JPanel implements ActionListener {
                 }
             } else {
                 if (key == KeyEvent.VK_UP) {
-                    pacman.setDy(-1);
-                    pacman.setDx(0);
+                    pacman.setRy(-1);
+                    pacman.setRx(0);
                 } else if (key == KeyEvent.VK_DOWN) {
-                    pacman.setDy(1);
-                    pacman.setDx(0);
+                    pacman.setRy(1);
+                    pacman.setRx(0);
                 } else if (key == KeyEvent.VK_LEFT) {
-                    pacman.setDy(0);
-                    pacman.setDx(-1);
+                    pacman.setRy(0);
+                    pacman.setRx(-1);
                 } else if (key == KeyEvent.VK_RIGHT) {
-                    pacman.setDy(0);
-                    pacman.setDx(1);
+                    pacman.setRy(0);
+                    pacman.setRx(1);
                 }
             }
         }
