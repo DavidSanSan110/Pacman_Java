@@ -12,6 +12,7 @@ public class PacmanPrueba extends JFrame {
     }
 
     public static void main(String[] args) {
+        //COMENTARIO
         PacmanPrueba p = new PacmanPrueba();
         p.setVisible(true);
         p.setTitle("Pacman");
