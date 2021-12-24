@@ -55,8 +55,12 @@ public class GraphicsHandler extends JPanel implements ActionListener {
     }
     
     private void initVariables() {
+        int i = 0;
         screenData = new int[NUM_BLOCKS * NUM_BLOCKS];
-        d = new Dimension(336,336);
+        for (i = 0; i < NUM_BLOCKS * NUM_BLOCKS; i++) {
+            screenData[i] = mapaData[i];
+        }
+        d = new Dimension(336,360);
         inGame = false;
         pacman = new Pacman();
         
@@ -76,16 +80,35 @@ public class GraphicsHandler extends JPanel implements ActionListener {
         g2d.fillRect(0, 0, d.width, d.height);
         
         drawMaze(g2d);
+        //drawScore(g2d);
         
         if (!inGame) {
             showIntroScreen(g2d);
         } else {
             drawPacman(g2d);
+            //playGame(g2d);
         }
     }
     
-    public void drawPacman(Graphics2D g2d) {
-        g2d.drawImage(new ImageIcon(pacman.getStop()).getImage(), pacman.getX() + 1, pacman.getY() + 1, this);
+    private void playGame(Graphics2D g2d) {
+        //movePacman(g2d)
+        //drawPacman(g2d)
+        //pacman.move(screenData);
+        //checkScore, checkRequest, checkDirection
+    }
+    
+    private void drawPacman(Graphics2D g2d) {
+        if (pacman.getDx() == 1 && pacman.getDy() == 0) {
+            g2d.drawImage(new ImageIcon(pacman.getRight()).getImage(), pacman.getX() + 1, pacman.getY() + 1, this);
+        } else if (pacman.getDx() == -1 && pacman.getDy() == 0) {
+            g2d.drawImage(new ImageIcon(pacman.getLeft()).getImage(), pacman.getX() + 1, pacman.getY() + 1, this);
+        } else if (pacman.getDx() == 0 && pacman.getDy() == 1) {
+            g2d.drawImage(new ImageIcon(pacman.getDown()).getImage(), pacman.getX() + 1, pacman.getY() + 1, this);
+        } else if (pacman.getDx() == 0 && pacman.getDy() == -1) {
+            g2d.drawImage(new ImageIcon(pacman.getUp()).getImage(), pacman.getX() + 1, pacman.getY() + 1, this);
+        } else {
+            g2d.drawImage(new ImageIcon(pacman.getStop()).getImage(), pacman.getX() + 1, pacman.getY() + 1, this);
+        }
     }
     
     private void drawMaze(Graphics2D g2d) {
@@ -130,16 +153,17 @@ public class GraphicsHandler extends JPanel implements ActionListener {
                 }
             } else {
                 if (key == KeyEvent.VK_UP) {
-                    
-                }
-                if (key == KeyEvent.VK_DOWN) {
-                    
-                }
-                if (key == KeyEvent.VK_RIGHT) {
-                    
-                }
-                if (key == KeyEvent.VK_LEFT) {
-                    
+                    pacman.setDy(-1);
+                    pacman.setDx(0);
+                } else if (key == KeyEvent.VK_DOWN) {
+                    pacman.setDy(1);
+                    pacman.setDx(0);
+                } else if (key == KeyEvent.VK_LEFT) {
+                    pacman.setDy(0);
+                    pacman.setDx(-1);
+                } else if (key == KeyEvent.VK_RIGHT) {
+                    pacman.setDy(0);
+                    pacman.setDx(1);
                 }
             }
         }
