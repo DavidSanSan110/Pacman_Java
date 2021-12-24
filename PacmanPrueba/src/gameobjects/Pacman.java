@@ -3,16 +3,22 @@ package gameobjects;
 import supers.GameObject;
 
 public class Pacman extends GameObject{
-    int lives;
+    int lives, score;
     int rx, ry;
-    String stop;
+    String stop, up, down, right, left;
+    
 
     public Pacman() {
         super(168,168,0,0,4);
         lives = 0;
         rx = 0;
         ry = 0;
+        score = 0;
         stop = "src\\images\\pacman.png";
+        up = "src\\images\\up.gif";
+        down = "src\\images\\down.gif";
+        right = "src\\images\\right.gif";
+        left = "src\\images\\left.gif";
     }
 
     public int getLives() {
@@ -43,13 +49,23 @@ public class Pacman extends GameObject{
         return stop;
     }
 
-    public void setStop(String stop) {
-        this.stop = stop;
+    public String getUp() {
+        return up;
+    }
+
+    public String getDown() {
+        return down;
+    }
+
+    public String getRight() {
+        return right;
+    }
+
+    public String getLeft() {
+        return left;
     }
     
     
-    
-    
-    
+
     
 }
