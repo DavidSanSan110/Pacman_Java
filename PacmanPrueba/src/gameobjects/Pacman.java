@@ -12,7 +12,7 @@ public class Pacman extends GameObject{
         lives = 0;
         rx = 0;
         ry = 0;
-        stop = "C:\\Users\\David\\Desktop\\PacmanPrueba\\src\\images\\pacman.png";
+        stop = "src\\images\\pacman.png";
     }
 
     public int getLives() {
