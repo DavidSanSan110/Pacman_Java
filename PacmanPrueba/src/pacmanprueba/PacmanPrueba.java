@@ -20,6 +20,7 @@ public class PacmanPrueba extends JFrame {
         p.setResizable(false);
         p.setDefaultCloseOperation(EXIT_ON_CLOSE);
         p.setLocationRelativeTo(null);
+        //prueba
     }
     
 }
