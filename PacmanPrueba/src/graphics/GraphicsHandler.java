@@ -1,5 +1,6 @@
 package graphics;
 
+import gameobjects.Ghost;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -14,17 +15,20 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 import gameobjects.Pacman;
 import java.awt.Font;
+import java.util.ArrayList;
 import javax.swing.ImageIcon;
 
 public class GraphicsHandler extends JPanel implements ActionListener {
     
     private final int BLOCK_SIZE = 24;
     private final int NUM_BLOCKS = 14;
+    private final int MAX_GHOSTS = 6;
     private final int SCREEN_SIZE = NUM_BLOCKS * BLOCK_SIZE;
     private Dimension d;
     private Timer timer;
     private boolean inGame;
     private Pacman pacman;
+    private ArrayList<Ghost> ghosts;
     //private int tempDirectionX;
     //private int tempDirectionY;
     
@@ -64,8 +68,12 @@ public class GraphicsHandler extends JPanel implements ActionListener {
         d = new Dimension(336,360);
         inGame = false;
         pacman = new Pacman();
+        ghosts = new ArrayList<>();
+        for (i = 0; i < MAX_GHOSTS; i++) {
+            ghosts.add(new Ghost());
+        }
         
-        timer = new Timer(20, this);
+        timer = new Timer(40, this);
         timer.start();
     }
     
@@ -95,7 +103,11 @@ public class GraphicsHandler extends JPanel implements ActionListener {
         //movePacman(g2d)
         pacman.movePacman(screenData, BLOCK_SIZE, NUM_BLOCKS);
         drawPacman(g2d);
-        //checkScore, checkRequest, checkDirection
+        //drawGhost(g2d);
+        for (Ghost g : ghosts) {
+            //g.moveGhost();
+            drawGhost(g2d, g);
+        }
     }
     
     private void drawPacman(Graphics2D g2d) {
@@ -110,6 +122,10 @@ public class GraphicsHandler extends JPanel implements ActionListener {
         } else {
             g2d.drawImage(new ImageIcon(pacman.getStop()).getImage(), pacman.getX() + 1, pacman.getY() + 1, this);
         }
+    }
+    
+    private void drawGhost(Graphics2D g2d, Ghost g) {
+            g2d.drawImage(new ImageIcon(g.getIcon()).getImage(), g.getX() + 1, g.getY() + 1, this);
     }
     
     private void drawMaze(Graphics2D g2d) {
