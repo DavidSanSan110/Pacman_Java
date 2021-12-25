@@ -42,9 +42,9 @@ public class GraphicsHandler extends JPanel implements ActionListener {
         0, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1, 0,
         0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
         0, 1, 1, 1, 0, 0, 0, 1, 0, 0, 1, 1, 1, 0,
-        1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 
+        0, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 0, 0, 
         1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 
-        1, 0, 1, 1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1,
+        0, 0, 1, 1, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0,
         0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
         0, 1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 1, 0,
         0, 1, 1, 1, 0, 1, 0, 0, 1, 0 ,1, 1, 1, 0,
@@ -61,24 +61,26 @@ public class GraphicsHandler extends JPanel implements ActionListener {
     
     private void initVariables() {
         int i = 0;
-        screenData = new int[NUM_BLOCKS * NUM_BLOCKS];
-        for (i = 0; i < NUM_BLOCKS * NUM_BLOCKS; i++) {
-            screenData[i] = mapaData[i];
-        }
-        d = new Dimension(336,360);
-        inGame = false;
+        
         pacman = new Pacman();
         ghosts = new ArrayList<>();
         for (i = 0; i < MAX_GHOSTS; i++) {
             ghosts.add(new Ghost());
         }
         
-        timer = new Timer(40, this);
-        timer.start();
+        screenData = new int[NUM_BLOCKS * NUM_BLOCKS];
+        for (i = 0; i < NUM_BLOCKS * NUM_BLOCKS; i++) {
+            screenData[i] = mapaData[i];
+        }
+        
     }
     
     private void initGraphics() {
+        d = new Dimension(336,360);
+        inGame = false;
         
+        timer = new Timer(40, this);
+        timer.start();
     }
     
     public void paintComponent(Graphics g) {
@@ -90,10 +92,11 @@ public class GraphicsHandler extends JPanel implements ActionListener {
         
         drawMaze(g2d);
         drawScore(g2d);
+        drawLives(g2d);
         
         if (!inGame) {
             showIntroScreen(g2d);
-        } else {
+        } else { 
             //drawPacman(g2d);
             playGame(g2d);
         }
@@ -103,11 +106,36 @@ public class GraphicsHandler extends JPanel implements ActionListener {
         //movePacman(g2d)
         pacman.movePacman(screenData, BLOCK_SIZE, NUM_BLOCKS);
         drawPacman(g2d);
-        //drawGhost(g2d);
         for (Ghost g : ghosts) {
-            //g.moveGhost();
+            g.moveGhost(screenData, BLOCK_SIZE, NUM_BLOCKS, pacman);
             drawGhost(g2d, g);
         }
+        
+        if(pacman.getTempLives() <= 0){
+
+            initVariables();
+            inGame = false;
+            
+        }else if(pacman.getTempLives() < pacman.getLives()){
+            
+            reset();
+            pacman.setLives(pacman.getTempLives());
+            
+        }
+    }
+    
+    private void reset(){
+        
+        pacman.setX(168);
+        pacman.setY(168);
+        
+        for(Ghost g : ghosts){
+            
+            g.setX(24);
+            g.setY(24);
+            
+        }
+        
     }
     
     private void drawPacman(Graphics2D g2d) {
@@ -152,8 +180,23 @@ public class GraphicsHandler extends JPanel implements ActionListener {
         g2d.setFont(new Font("Arial", Font.BOLD, 12));
         g2d.setColor(new Color(255, 255, 255));
         String score = "Score: " + pacman.getScore();
+        //String lives = "Lives: " + pacman.getLives();
         g2d.drawString(score, SCREEN_SIZE / 2 + 96, SCREEN_SIZE + 16);
-        //Lives
+        //g2d.drawString(lives, SCREEN_SIZE / 10, SCREEN_SIZE + 16);
+        
+    }   
+    
+    private void drawLives(Graphics2D g2d){
+        
+        int i;
+        
+        for(i = 0; i < pacman.getLives(); i++){
+            
+            g2d.drawImage(new ImageIcon(pacman.getHeart()).getImage(), SCREEN_SIZE / 20 + i * (BLOCK_SIZE / 2), SCREEN_SIZE, this);
+            
+        }
+             
+        
     }
     
     private void showIntroScreen(Graphics2D g2d) {
