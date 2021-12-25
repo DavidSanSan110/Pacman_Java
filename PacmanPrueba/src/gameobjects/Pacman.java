@@ -3,9 +3,11 @@ package gameobjects;
 import supers.GameObject;
 
 public class Pacman extends GameObject{
+    int [] counter;
     int lives, score, tempLives;
-    int rx, ry;
+    int rx, ry, rs;
     String stop, up, down, right, left, heart;
+    boolean isInmortal = false;
     
 
     public Pacman() {
@@ -14,7 +16,9 @@ public class Pacman extends GameObject{
         tempLives = 3;
         rx = 0;
         ry = 0;
+        rs = -1;
         score = 0;
+        counter = new int[]{0, 0};
         stop = "src\\images\\pacman.png";
         up = "src\\images\\up.gif";
         down = "src\\images\\down.gif";
@@ -29,7 +33,14 @@ public class Pacman extends GameObject{
         int posXi;
         int posYi;
         
+            
         if(getX() % blockSize == 0 && getY() % blockSize == 0){
+            
+            if(rs != getSpeed() && rs != -1) {
+                setSpeed(rs);
+            }
+            checkTokens();
+            
             posXi = getX() / blockSize;
             posYi = getY() / blockSize;
 
@@ -45,6 +56,26 @@ public class Pacman extends GameObject{
         setY(getY() + getDy() * getSpeed()); 
         
         checkEndMap(blockSize, numBlocks);
+    }
+    
+    public void checkTokens() {
+        if (rs != -1) {
+            if(getSpeed() == rs) {
+                counter[0]++;
+            }
+            if(counter[0] >= 50) {
+                setSpeed(4);
+                rs = -1;
+                counter[0] = 0;
+            }
+        } 
+        if (isInmortal) {
+            counter[1]++;
+        }
+        if (counter[1] >= 25) {
+            setIsInmortal(false);
+            counter[1] = 0;
+        }
     }
     
     public void checkEndMap(int blockSize, int numBlocks) {
@@ -183,6 +214,14 @@ public class Pacman extends GameObject{
         return ry;
     }
 
+    public int getRs() {
+        return rs;
+    }
+
+    public void setRs(int rs) {
+        this.rs = rs;
+    }
+
     public void setRy(int ry) {
         this.ry = ry;
     }
@@ -193,6 +232,10 @@ public class Pacman extends GameObject{
 
     public void setScore(int score) {
         this.score = score;
+    }
+
+    public void setCounter(int token, int counter) {
+        this.counter[token] = counter;
     }
 
     public String getStop() {
@@ -222,5 +265,15 @@ public class Pacman extends GameObject{
     public void setHeart(String heart) {
         this.heart = heart;
     }
+
+    public boolean isIsInmortal() {
+        return isInmortal;
+    }
+
+    public void setIsInmortal(boolean isInmortal) {
+        this.isInmortal = isInmortal;
+    }
+    
+    
  
 }
