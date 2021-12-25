@@ -32,7 +32,7 @@ public class Pacman extends GameObject{
             posYi = getY() / blockSize;
 
             pos = posXi + numBlocks * posYi;
-            System.out.printf("%d\n", pos);
+            //System.out.printf("%d\n", pos);
 
             checkScore(screenData, pos);
             checkRequest(screenData, pos, numBlocks);
@@ -46,10 +46,10 @@ public class Pacman extends GameObject{
     }
     
     public void checkEndMap(int blockSize, int numBlocks) {
-        System.out.printf("%d-%d\n", getX(), getY());
-        if (getX() <= -1) {
+        //System.out.printf("%d-%d\n", getX(), getY());
+        if (getX() < 0) {
             setX(blockSize * numBlocks - blockSize);
-        } else if (getX() >= numBlocks * blockSize + 1) {
+        } else if (getX() >= numBlocks * blockSize) {
             setX(0);
         }
     }
