@@ -3,14 +3,15 @@ package gameobjects;
 import supers.GameObject;
 
 public class Pacman extends GameObject{
-    int lives, score;
+    int lives, score, tempLives;
     int rx, ry;
-    String stop, up, down, right, left;
+    String stop, up, down, right, left, heart;
     
 
     public Pacman() {
         super(168,168,0,0,4);
-        lives = 0;
+        lives = 3;
+        tempLives = 3;
         rx = 0;
         ry = 0;
         score = 0;
@@ -19,6 +20,7 @@ public class Pacman extends GameObject{
         down = "src\\images\\down.gif";
         right = "src\\images\\right.gif";
         left = "src\\images\\left.gif";
+        heart = "src\\images\\heart.png";
     }
     
     public void movePacman(int[] screenData, int blockSize, int numBlocks){
@@ -153,6 +155,14 @@ public class Pacman extends GameObject{
         }
     }
 
+    public int getTempLives() {
+        return tempLives;
+    }
+
+    public void setTempLives(int tempLives) {
+        this.tempLives = tempLives;
+    }    
+    
     public int getLives() {
         return lives;
     }
@@ -204,10 +214,13 @@ public class Pacman extends GameObject{
     public String getLeft() {
         return left;
     }
-    
-    
-    
-    
 
-    
+    public String getHeart() {
+        return heart;
+    }
+
+    public void setHeart(String heart) {
+        this.heart = heart;
+    }
+ 
 }
