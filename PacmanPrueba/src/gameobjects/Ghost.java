@@ -3,12 +3,13 @@ package gameobjects;
 import supers.GameObject;
 
 public class Ghost extends GameObject{
-    private String icon;
+    private String icon, iconInmortal;
     private int counter;
     
     public Ghost() {
         super(24,24,0,0,(int) Math.floor(Math.random()*(4-1+1)+1));
         icon = "src\\images\\ghost.gif";
+        iconInmortal = "src\\images\\ghostInmortal.gif";
         counter = 0;
     }
 
@@ -49,10 +50,10 @@ public class Ghost extends GameObject{
         
         if(pacman.getX() > getX() - (blockSize / 2) && pacman.getX() < getX() + (blockSize / 2) && pacman.getY() > getY() - (blockSize / 2) && pacman.getY() < getY() + (blockSize / 2)){
             
-            pacman.tempLives--;
-            
+            if (!pacman.isInmortal) {
+                pacman.tempLives--;  
+            }
         }
-
     }
     
     
@@ -153,4 +154,14 @@ public class Ghost extends GameObject{
     public void setIcon(String icon) {
         this.icon = icon;
     }
+
+    public String getIconInmortal() {
+        return iconInmortal;
+    }
+
+    public void setIconInmortal(String iconInmortal) {
+        this.iconInmortal = iconInmortal;
+    }
+    
+    
 }
