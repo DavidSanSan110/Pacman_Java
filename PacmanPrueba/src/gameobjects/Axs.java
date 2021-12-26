@@ -1,5 +1,7 @@
 package gameobjects;
 
+import supers.Token;
+
 public class Axs extends Token{
     
     public Axs(int x, int y) {
@@ -11,6 +13,7 @@ public class Axs extends Token{
         if(pacman.getX() > getX() - (blockSize / 2) && pacman.getX() < getX() + (blockSize / 2) && pacman.getY() > getY() - (blockSize / 2) && pacman.getY() < getY() + (blockSize / 2)){
             pacman.setIsInmortal(true);
             pacman.setCounter(1, 0);
+            playSound(getSound(), (float) 0.0);
             return true;
         }
         return  false;
