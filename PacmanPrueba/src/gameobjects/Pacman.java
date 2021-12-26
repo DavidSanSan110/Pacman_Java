@@ -6,7 +6,7 @@ public class Pacman extends GameObject{
     int [] counter;
     int lives, score, tempLives;
     int rx, ry, rs;
-    String stop, up, down, right, left, heart;
+    String stop, up, down, right, left, heart, sound, winSound;
     boolean isInmortal = false;
     
 
@@ -25,6 +25,8 @@ public class Pacman extends GameObject{
         right = "src\\images\\right.gif";
         left = "src\\images\\left.gif";
         heart = "src\\images\\heart.png";
+        sound = "src\\sounds\\fastWaka.wav";
+        winSound = "src\\sounds\\winSound.wav";
     }
     
     public void movePacman(int[] screenData, int blockSize, int numBlocks){
@@ -161,6 +163,7 @@ public class Pacman extends GameObject{
             if(screenData[next] == 0){  // choca con solido
                 setDx(0);
                 setDy(0);
+                return;
             }
         }
         else if(getDx() == -1 && getDy() == 0){
@@ -168,6 +171,7 @@ public class Pacman extends GameObject{
             if(screenData[prev] == 0){  // choca con solido
                 setDx(0);
                 setDy(0);
+                return;
             }
         }
         else if(getDx() == 0 && getDy() == 1){
@@ -175,6 +179,7 @@ public class Pacman extends GameObject{
             if(screenData[pos + numBlocks] == 0){  // choca con solido
                 setDx(0);
                 setDy(0);
+                return;
             }
         }
         else if(getDx() == 0 && getDy() == -1){
@@ -182,10 +187,23 @@ public class Pacman extends GameObject{
             if(screenData[pos - numBlocks] == 0){  // choca con solido
                 setDx(0);
                 setDy(0);
+                return;
             }
+        } else {
+            return;
+        }
+        
+        if (getClip() == null) {
+                playSound(sound, (float) -30.0);
+        } else if (getClip() != null && !getClip().isActive()) {
+            playSound(sound, (float) -20.0);
         }
     }
 
+    public String getWinSound() {
+        return winSound;
+    }
+    
     public int getTempLives() {
         return tempLives;
     }
