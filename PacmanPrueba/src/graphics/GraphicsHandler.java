@@ -16,7 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 import gameobjects.Pacman;
 import gameobjects.Slp;
-import gameobjects.Token;
+import supers.Token;
 import java.awt.Font;
 import java.util.ArrayList;
 import javax.swing.ImageIcon;
@@ -28,6 +28,7 @@ public class GraphicsHandler extends JPanel implements ActionListener {
     private final int MAX_GHOSTS = 3;
     private final int MAX_TOKENS = 4;
     private final int SCREEN_SIZE = NUM_BLOCKS * BLOCK_SIZE;
+    private final String backGroundSound = "src\\sounds\\backGround.wav";
     private Dimension d;
     private Timer timer;
     private boolean inGame;
@@ -77,6 +78,7 @@ public class GraphicsHandler extends JPanel implements ActionListener {
         }
         
         screenData = new int[NUM_BLOCKS * NUM_BLOCKS];
+        maxScore = 0;
         for (i = 0; i < NUM_BLOCKS * NUM_BLOCKS; i++) {
             screenData[i] = mapaData[i];
             if (screenData[i] == 1) {
@@ -91,6 +93,7 @@ public class GraphicsHandler extends JPanel implements ActionListener {
     }
     
     private void initGraphics() {
+        pacman.playSound(pacman.createSound(backGroundSound, (float) -30.0));
         d = new Dimension(336,360);
         inGame = false;
         isWon = false;
@@ -152,6 +155,7 @@ public class GraphicsHandler extends JPanel implements ActionListener {
         }
         
         if(pacman.getScore() == maxScore) {
+            pacman.playSound(pacman.getWinSound(), (float) 0.0);
             initVariables();
             inGame = false;
             isWon = true;

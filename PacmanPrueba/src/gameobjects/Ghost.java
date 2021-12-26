@@ -5,11 +5,14 @@ import supers.GameObject;
 public class Ghost extends GameObject{
     private String icon, iconInmortal;
     private int counter;
+    private String deathSound, hitSound;
     
     public Ghost() {
         super(24,24,0,0,(int) Math.floor(Math.random()*(4-1+1)+1));
         icon = "src\\images\\ghost.gif";
         iconInmortal = "src\\images\\ghostInmortal.gif";
+        hitSound = "src\\sounds\\toHit.wav";
+        deathSound = "src\\sounds\\toDeath.wav";
         counter = 0;
     }
 
@@ -49,9 +52,13 @@ public class Ghost extends GameObject{
     public void checkCollisions(Pacman pacman, int blockSize){
         
         if(pacman.getX() > getX() - (blockSize / 2) && pacman.getX() < getX() + (blockSize / 2) && pacman.getY() > getY() - (blockSize / 2) && pacman.getY() < getY() + (blockSize / 2)){
-            
             if (!pacman.isInmortal) {
-                pacman.tempLives--;  
+                pacman.tempLives--;
+                if(pacman.tempLives > 0) {
+                    playSound(hitSound, (float) 0.0);
+                } else {
+                    playSound(deathSound, (float) 0.0);
+                }
             }
         }
     }
