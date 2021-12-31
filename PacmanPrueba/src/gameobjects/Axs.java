@@ -5,7 +5,7 @@ import supers.Token;
 public class Axs extends Token{
     
     public Axs(int x, int y) {
-        super(x, y, "src\\images\\axs.png");
+        super(x, y, "https://i.imgur.com/Gq4Cx3C.png");
     }
 
     @Override

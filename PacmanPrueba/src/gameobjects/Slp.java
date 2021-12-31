@@ -5,7 +5,7 @@ import supers.Token;
 public class Slp extends Token{
     
     public Slp(int x, int y) {
-        super(x, y, "src\\images\\slp.png");
+        super(x, y, "https://i.imgur.com/TzaCkr1.png");
     }
 
     @Override
