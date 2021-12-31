@@ -1,16 +1,22 @@
 package gameobjects;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import supers.GameObject;
 
 public class Ghost extends GameObject{
-    private String icon, iconInmortal;
+    private URL icon, iconInmortal;
     private int counter;
     private String deathSound, hitSound;
     
     public Ghost() {
         super(24,24,0,0,(int) Math.floor(Math.random()*(4-1+1)+1));
-        icon = "src\\images\\ghost.gif";
-        iconInmortal = "src\\images\\ghostInmortal.gif";
+        try {
+            icon = new URL("https://i.imgur.com/GTz2xQC.gif");
+            iconInmortal = new URL("https://i.imgur.com/oRpzk78.gif");
+        } catch (MalformedURLException ex) {
+            System.out.println("Error al cargar imagen");
+        }
         hitSound = "src\\sounds\\toHit.wav";
         deathSound = "src\\sounds\\toDeath.wav";
         counter = 0;
@@ -152,23 +158,12 @@ public class Ghost extends GameObject{
         return true;
         
     }
-            
-    
-    public String getIcon() {
+
+    public URL getIcon() {
         return icon;
     }
 
-    public void setIcon(String icon) {
-        this.icon = icon;
-    }
-
-    public String getIconInmortal() {
+    public URL getIconInmortal() {
         return iconInmortal;
-    }
-
-    public void setIconInmortal(String iconInmortal) {
-        this.iconInmortal = iconInmortal;
-    }
-    
-    
+    }  
 }

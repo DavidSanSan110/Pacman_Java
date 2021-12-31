@@ -1,13 +1,20 @@
 package gameobjects;
 
+import static java.lang.Thread.sleep;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import supers.GameObject;
 
 public class Pacman extends GameObject{
+    
     int [] counter;
     int lives, score, tempLives;
     int rx, ry, rs;
-    String stop, up, down, right, left, heart, sound, winSound;
+    String sound, winSound;
     boolean isInmortal = false;
+    URL stop, up, down, left, right, heart;
     
 
     public Pacman() {
@@ -19,12 +26,16 @@ public class Pacman extends GameObject{
         rs = -1;
         score = 0;
         counter = new int[]{0, 0};
-        stop = "src\\images\\pacman.png";
-        up = "src\\images\\up.gif";
-        down = "src\\images\\down.gif";
-        right = "src\\images\\right.gif";
-        left = "src\\images\\left.gif";
-        heart = "src\\images\\heart.png";
+        try {
+            stop = new URL("https://i.imgur.com/xypYDPO.png"); 
+            up = new URL("https://i.imgur.com/yPBEXm1.gif");
+            down = new URL("https://i.imgur.com/QCBrVU9.gif");
+            left = new URL("https://i.imgur.com/L8t05RA.gif");
+            right = new URL("https://i.imgur.com/CCXauwj.gif");
+            heart = new URL("https://i.imgur.com/lq7BoyD.png");
+        } catch (MalformedURLException ex) {
+            System.out.println("Error al cargar imagen");
+        }
         sound = "src\\sounds\\fastWaka.wav";
         winSound = "src\\sounds\\winSound.wav";
     }
@@ -256,32 +267,28 @@ public class Pacman extends GameObject{
         this.counter[token] = counter;
     }
 
-    public String getStop() {
+    public URL getStop() {
         return stop;
     }
 
-    public String getUp() {
+    public URL getUp() {
         return up;
     }
 
-    public String getDown() {
+    public URL getDown() {
         return down;
     }
 
-    public String getRight() {
-        return right;
-    }
-
-    public String getLeft() {
+    public URL getLeft() {
         return left;
     }
 
-    public String getHeart() {
-        return heart;
+    public URL getRight() {
+        return right;
     }
 
-    public void setHeart(String heart) {
-        this.heart = heart;
+    public URL getHeart() {
+        return heart;
     }
 
     public boolean isIsInmortal() {
