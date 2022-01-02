@@ -2,8 +2,6 @@ package pacmanprueba;
 
 import graphics.GraphicsHandler;
 import javax.swing.JFrame;
-import gameobjects.Pacman;
-import java.util.HashSet;
 
 public class PacmanPrueba extends JFrame {
     
@@ -19,6 +17,7 @@ public class PacmanPrueba extends JFrame {
         p.setDefaultCloseOperation(EXIT_ON_CLOSE);
         p.setLocationRelativeTo(null);
         p.setVisible(true);
+        p.toFront();
     }
     
 }

@@ -1,10 +1,13 @@
 package supers;
 
-import java.io.File;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.FloatControl;
+import javax.sound.sampled.LineUnavailableException;
 
 public class GameObject {
     private int x, y;
@@ -18,35 +21,46 @@ public class GameObject {
         this.dx = dx;
         this.dy = dy;
         this.speed = speed;
+        this.clip = null;
     }
     
-    public void playSound(String sound, float volume) {
+    public void playSound(byte [] sound, AudioInputStream ais, float volume) {
+        
+        InputStream is = new ByteArrayInputStream(sound);
+        AudioInputStream aisf = new AudioInputStream(is, ais.getFormat(), ais.getFrameLength());
+        
         try {
-            AudioInputStream audio = AudioSystem.getAudioInputStream(new File(sound).getAbsoluteFile());
+            if (aisf == null) return;
             clip = AudioSystem.getClip();
-            clip.open(audio);
+            clip.open(aisf);
             FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-            gainControl.setValue(volume); // Reduce volume by 10 decibels.
+            gainControl.setValue(volume);
             clip.start();
-        } catch (Exception ex) {
+        } catch (LineUnavailableException | IOException ex) {
         }
     }
     
     public void playSound(Clip c) {
-        c.loop(Clip.LOOP_CONTINUOUSLY);
+        if (c != null) {
+            c.loop(Clip.LOOP_CONTINUOUSLY);
+        }
     }
     
-    public Clip createSound(String sound, float volume) {
+    public Clip createSound(byte [] sound, AudioInputStream ais, float volume) {
+        
+        InputStream is = new ByteArrayInputStream(sound);
+        AudioInputStream aisf = new AudioInputStream(is, ais.getFormat(), ais.getFrameLength());
+        
         try {
-            AudioInputStream audio = AudioSystem.getAudioInputStream(new File(sound).getAbsoluteFile());
-            Clip clip = AudioSystem.getClip();
-            clip.open(audio);
-            FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+            if (aisf == null) return null;
+            Clip p = AudioSystem.getClip();
+            p.open(aisf);
+            FloatControl gainControl = (FloatControl) p.getControl(FloatControl.Type.MASTER_GAIN);
             gainControl.setValue(volume);
-            return clip;
-        } catch (Exception ex) {
-            return null;
+            return p;
+        } catch (LineUnavailableException | IOException ex) {
         }
+        return null;
     }
 
     public Clip getClip() {
