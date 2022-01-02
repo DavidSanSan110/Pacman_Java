@@ -1,10 +1,7 @@
 package gameobjects;
 
-import static java.lang.Thread.sleep;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.sound.sampled.AudioInputStream;
 import supers.GameObject;
 
 public class Pacman extends GameObject{
@@ -12,12 +9,13 @@ public class Pacman extends GameObject{
     int [] counter;
     int lives, score, tempLives;
     int rx, ry, rs;
-    String sound, winSound;
     boolean isInmortal = false;
     URL stop, up, down, left, right, heart;
+    byte [] fW, wS;
+    AudioInputStream fWais, wSais;
     
 
-    public Pacman() {
+    public Pacman(URL stopp, URL upp, URL downp, URL leftp, URL rightp, URL heartp, byte [] a1, byte [] a2, AudioInputStream a1ais, AudioInputStream a2ais) {
         super(168,168,0,0,4);
         lives = 3;
         tempLives = 3;
@@ -26,18 +24,16 @@ public class Pacman extends GameObject{
         rs = -1;
         score = 0;
         counter = new int[]{0, 0};
-        try {
-            stop = new URL("https://i.imgur.com/xypYDPO.png"); 
-            up = new URL("https://i.imgur.com/yPBEXm1.gif");
-            down = new URL("https://i.imgur.com/QCBrVU9.gif");
-            left = new URL("https://i.imgur.com/L8t05RA.gif");
-            right = new URL("https://i.imgur.com/CCXauwj.gif");
-            heart = new URL("https://i.imgur.com/lq7BoyD.png");
-        } catch (MalformedURLException ex) {
-            System.out.println("Error al cargar imagen");
-        }
-        sound = "src\\sounds\\fastWaka.wav";
-        winSound = "src\\sounds\\winSound.wav";
+        stop = stopp; 
+        up = upp;
+        down = downp;
+        left = leftp;
+        right = rightp;
+        heart = heartp;
+        fW = a1;
+        wS = a2;
+        fWais = a1ais;
+        wSais = a2ais;
     }
     
     public void movePacman(int[] screenData, int blockSize, int numBlocks){
@@ -205,14 +201,12 @@ public class Pacman extends GameObject{
         }
         
         if (getClip() == null) {
-                playSound(sound, (float) -30.0);
+            playSound(fW, fWais, (float) -30.0);
         } else if (getClip() != null && !getClip().isActive()) {
-            playSound(sound, (float) -20.0);
+            playSound(fW, fWais, (float) -30.0);
         }
-    }
-
-    public String getWinSound() {
-        return winSound;
+        
+        //playSound(fastWaka, (float) -30.0);
     }
     
     public int getTempLives() {
@@ -298,6 +292,24 @@ public class Pacman extends GameObject{
     public void setIsInmortal(boolean isInmortal) {
         this.isInmortal = isInmortal;
     }
+
+    public byte [] getWS() {
+        return wS;
+    }
+
+    public byte [] getFW() {
+        return fW;
+    }
+
+    public AudioInputStream getFWais() {
+        return fWais;
+    }
+
+    public AudioInputStream getWSais() {
+        return wSais;
+    }
+    
+    
     
     
  

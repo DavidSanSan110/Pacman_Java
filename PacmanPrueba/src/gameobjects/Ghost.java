@@ -1,24 +1,23 @@
 package gameobjects;
 
-import java.net.MalformedURLException;
 import java.net.URL;
+import javax.sound.sampled.AudioInputStream;
 import supers.GameObject;
 
 public class Ghost extends GameObject{
-    private URL icon, iconInmortal;
+    URL icon, iconInmortal;
+    byte [] tH, tD;
+    AudioInputStream tHais, tDais;
     private int counter;
-    private String deathSound, hitSound;
     
-    public Ghost() {
+    public Ghost(URL iconp, URL iconInmortalp, byte [] a1, byte [] a2, AudioInputStream a1ais, AudioInputStream a2ais) {
         super(24,24,0,0,(int) Math.floor(Math.random()*(4-1+1)+1));
-        try {
-            icon = new URL("https://i.imgur.com/GTz2xQC.gif");
-            iconInmortal = new URL("https://i.imgur.com/oRpzk78.gif");
-        } catch (MalformedURLException ex) {
-            System.out.println("Error al cargar imagen");
-        }
-        hitSound = "src\\sounds\\toHit.wav";
-        deathSound = "src\\sounds\\toDeath.wav";
+        icon = iconp;
+        iconInmortal = iconInmortalp;
+        tH = a1;
+        tD = a2;
+        tHais = a1ais;
+        tDais = a2ais;
         counter = 0;
     }
 
@@ -61,9 +60,9 @@ public class Ghost extends GameObject{
             if (!pacman.isInmortal) {
                 pacman.tempLives--;
                 if(pacman.tempLives > 0) {
-                    playSound(hitSound, (float) 0.0);
+                    playSound(getTH(), getTHais(), (float) 0.0);
                 } else {
-                    playSound(deathSound, (float) 0.0);
+                    playSound(getTD(), getTDais(), (float) 0.0);
                 }
             }
         }
@@ -166,4 +165,22 @@ public class Ghost extends GameObject{
     public URL getIconInmortal() {
         return iconInmortal;
     }  
+
+    public byte[] getTH() {
+        return tH;
+    }
+
+    public byte[] getTD() {
+        return tD;
+    }
+
+    public AudioInputStream getTHais() {
+        return tHais;
+    }
+
+    public AudioInputStream getTDais() {
+        return tDais;
+    }
+    
+    
 }

@@ -17,7 +17,13 @@ import gameobjects.Pacman;
 import gameobjects.Slp;
 import supers.Token;
 import java.awt.Font;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.ImageIcon;
 
 public class GraphicsHandler extends JPanel implements ActionListener {
@@ -27,7 +33,6 @@ public class GraphicsHandler extends JPanel implements ActionListener {
     private final int MAX_GHOSTS = 3;
     private final int MAX_TOKENS = 4;
     private final int SCREEN_SIZE = NUM_BLOCKS * BLOCK_SIZE;
-    private final String backGroundSound = "src\\sounds\\backGround.wav";
     private Dimension d;
     private Timer timer;
     private boolean inGame;
@@ -36,6 +41,9 @@ public class GraphicsHandler extends JPanel implements ActionListener {
     private Pacman pacman;
     private ArrayList<Ghost> ghosts;
     private ArrayList<Token> tokens;
+    private URL stop, up, down, left, right, heart, icon, iconInmortal, slpIcon, axsIcon;
+    private AudioInputStream bG, fW, pU, tD, tH, wS;
+    private byte [] bGb, fWb, pUb, tDb, tHb, wSb;
     //private int tempDirectionX;
     //private int tempDirectionY;
     
@@ -60,20 +68,98 @@ public class GraphicsHandler extends JPanel implements ActionListener {
     };
     
     public GraphicsHandler() {
+        /*
+        try {
+            backGroundSound = new URL("https://dl.dropboxusercontent.com/s/asmfqne7crsbmmi/background.wav");
+        } catch (MalformedURLException ex) {
+            System.out.println("Error al cargar imagen");
+        }
+        */
+        loadMedia();
+        
         initVariables();
         addKeyListener(new TAdapter());
         setFocusable(true);
         initGraphics();
     }
     
+    private void loadMedia() {
+        
+        
+        try {
+            //Images
+            stop = new URL("https://i.imgur.com/xypYDPO.png");
+            clear();
+            System.out.println("6% loaded");
+            up = new URL("https://i.imgur.com/yPBEXm1.gif");
+            clear();
+            System.out.println("12% loaded");
+            down = new URL("https://i.imgur.com/QCBrVU9.gif");
+            clear();
+            System.out.println("18% loaded");
+            left = new URL("https://i.imgur.com/L8t05RA.gif");
+            clear();
+            System.out.println("24% loaded");
+            right = new URL("https://i.imgur.com/CCXauwj.gif");
+            clear();
+            System.out.println("30% loaded");
+            heart = new URL("https://i.imgur.com/lq7BoyD.png");
+            clear();
+            System.out.println("36% loaded");
+            icon = new URL("https://i.imgur.com/GTz2xQC.gif");
+            clear();
+            System.out.println("42% loaded");
+            iconInmortal = new URL("https://i.imgur.com/oRpzk78.gif");
+            clear();
+            System.out.println("48% loaded");
+            slpIcon = new URL("https://i.imgur.com/TzaCkr1.png");
+            clear();
+            System.out.println("54% loaded");
+            axsIcon = new URL("https://i.imgur.com/Gq4Cx3C.png");
+            clear();
+            System.out.println("60% loaded");
+            //Sounds
+            bG = AudioSystem.getAudioInputStream(new URL("https://dl.dropboxusercontent.com/s/asmfqne7crsbmmi/background.wav"));
+            clear();
+            System.out.println("67% loaded");
+            fW = AudioSystem.getAudioInputStream(new URL("https://dl.dropboxusercontent.com/s/rwypsbq4ahcunbb/fastWaka.wav"));
+            clear();
+            System.out.println("74% loaded");
+            pU = AudioSystem.getAudioInputStream(new URL("https://dl.dropboxusercontent.com/s/3o7y6tdtm05gswp/powerUp.wav"));
+            clear();
+            System.out.println("81% loaded");
+            tD = AudioSystem.getAudioInputStream(new URL("https://dl.dropboxusercontent.com/s/yssvffg5nyfcbol/toDeath.wav"));
+            clear();
+            System.out.println("88% loaded");
+            tH = AudioSystem.getAudioInputStream(new URL("https://dl.dropboxusercontent.com/s/ll54mz69qoa5hbm/toHit.wav"));
+            clear();
+            System.out.println("95% loaded");
+            wS = AudioSystem.getAudioInputStream(new URL("https://dl.dropboxusercontent.com/s/lzmdmwegl837rz4/winSound.wav"));
+            clear();
+            System.out.println("100% loaded");
+            
+            bGb = bG.readAllBytes();
+            fWb = fW.readAllBytes();
+            pUb = pU.readAllBytes();
+            tDb = tD.readAllBytes();
+            tHb = tH.readAllBytes();
+            wSb = wS.readAllBytes();
+            
+        } catch (MalformedURLException ex) {
+            System.out.println("Error al cargar imagenes");
+        } catch (UnsupportedAudioFileException | IOException ex) {
+            System.out.println("Error al cargar audio");;
+        }
+    }
+    
     private void initVariables() {
         int i = 0;
         
-        pacman = new Pacman();
+        pacman = new Pacman(stop, up, down, left, right, heart, fWb, wSb, fW, wS);
         ghosts = new ArrayList<>();
         tokens = new ArrayList<>();
         for (i = 0; i < MAX_GHOSTS; i++) {
-            ghosts.add(new Ghost());
+            ghosts.add(new Ghost(icon, iconInmortal, tHb, tDb, tH, tD));
         }
         
         screenData = new int[NUM_BLOCKS * NUM_BLOCKS];
@@ -83,9 +169,9 @@ public class GraphicsHandler extends JPanel implements ActionListener {
             if (screenData[i] == 1) {
                 maxScore++;
                 if (tokens.size() < MAX_TOKENS && (int) Math.floor(Math.random()*(40-1+1)+1) == 17) {
-                    tokens.add(new Slp((i % NUM_BLOCKS * BLOCK_SIZE), i / NUM_BLOCKS * BLOCK_SIZE));
+                    tokens.add(new Slp((i % NUM_BLOCKS * BLOCK_SIZE), i / NUM_BLOCKS * BLOCK_SIZE, slpIcon, pUb, pU));
                 } else if (tokens.size() < MAX_TOKENS && (int) Math.floor(Math.random()*(40-1+1)+1) == 16) {
-                    tokens.add(new Axs((i % NUM_BLOCKS * BLOCK_SIZE), i / NUM_BLOCKS * BLOCK_SIZE));
+                    tokens.add(new Axs((i % NUM_BLOCKS * BLOCK_SIZE), i / NUM_BLOCKS * BLOCK_SIZE, axsIcon, pUb, pU));
                 }
             } 
         }
@@ -94,7 +180,8 @@ public class GraphicsHandler extends JPanel implements ActionListener {
     private void initGraphics() {
         inGame = false;
         isWon = false;
-        pacman.playSound(pacman.createSound(backGroundSound, (float) -30.0));
+        //(pacman.playSound(pacman.createSound(bG, (float) -30.0));
+        pacman.playSound(pacman.createSound(bGb, bG, (float) -30.0));
         //d = new Dimension(336,360);
         timer = new Timer(40, this);
         timer.start();
@@ -128,7 +215,6 @@ public class GraphicsHandler extends JPanel implements ActionListener {
         for (Token t : tokens) {
             drawToken(g2d, t);
             if(t.checkCollisions(pacman, BLOCK_SIZE)) {
-                //System.out.println("borrado");
                 tokensToRemove.add(t);
             }   
         }
@@ -153,7 +239,7 @@ public class GraphicsHandler extends JPanel implements ActionListener {
         }
         
         if(pacman.getScore() == maxScore) {
-            pacman.playSound(pacman.getWinSound(), (float) 0.0);
+            pacman.playSound(pacman.getWS(), pacman.getWSais(), (float) 0.0);
             initVariables();
             inGame = false;
             isWon = true;
@@ -301,6 +387,20 @@ public class GraphicsHandler extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         repaint();
+    }
+    
+    public static void clear() {
+        final String ANSI_CLS = "\u001b[2J";
+        final String ANSI_HOME = "\u001b[H";
+
+        try {
+            if (System.getProperty("os.name").contains("Windows")) {
+                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+            } else {
+                System.out.print(ANSI_CLS + ANSI_HOME);
+            }
+        } catch (IOException | InterruptedException ex) {
+        }
     }
     
 }

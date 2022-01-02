@@ -1,22 +1,20 @@
 package supers;
 
 import gameobjects.Pacman;
-import java.net.MalformedURLException;
 import java.net.URL;
+import javax.sound.sampled.AudioInputStream;
 
 public abstract class Token extends GameObject{
 
     private URL icon;
-    private String sound;
+    byte [] pU;
+    AudioInputStream pUais;
     
-    public Token (int x, int y, String path) {
+    public Token (int x, int y, URL iconp, byte [] a1, AudioInputStream a1ais) {
         super(x, y, 0, 0, 0);
-        try {
-            this.icon = new URL(path);
-        } catch (MalformedURLException ex) {
-            System.out.println("Error al cargar imagen");
-        }
-        this.sound = "src\\sounds\\powerUp.wav";
+        this.icon = iconp;
+        this.pU = a1;
+        this.pUais = a1ais;
     }
 
     public abstract boolean checkCollisions(Pacman pacman, int blockSize);
@@ -25,9 +23,17 @@ public abstract class Token extends GameObject{
         return this.icon;
     }
 
-    public String getSound() {
-        return sound;
+    public byte[] getPU() {
+        return pU;
     }
+
+    public AudioInputStream getPUais() {
+        return pUais;
+    }
+
+    
+    
+    
     
     
     
