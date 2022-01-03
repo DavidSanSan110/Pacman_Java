@@ -16,7 +16,7 @@ public class Pacman extends GameObject{
     
 
     public Pacman(URL stopp, URL upp, URL downp, URL leftp, URL rightp, URL heartp, byte [] a1, byte [] a2, AudioInputStream a1ais, AudioInputStream a2ais) {
-        super(168,168,0,0,4);
+        super(216,384,0,0,4);
         lives = 3;
         tempLives = 3;
         rx = 0;
@@ -101,11 +101,11 @@ public class Pacman extends GameObject{
         int next;
         int prev;
         
-        if (pos % 14 == 0) {
+        if (pos % numBlocks == 0) {
             next = pos + 1;
-            prev = pos + 13;
-        } else if (pos % 14 == 13) {
-            next = pos - 13;
+            prev = pos + numBlocks - 1;
+        } else if (pos % 14 == numBlocks - 1) {
+            next = pos - numBlocks - 1;
             prev = pos - 1;
         } else {
             next = pos + 1;
@@ -154,11 +154,11 @@ public class Pacman extends GameObject{
         int next;
         int prev;
         
-        if (pos % 14 == 0) {
+        if (pos % numBlocks == 0) {
             next = pos + 1;
-            prev = pos + 13;
-        } else if (pos % 14 == 13) {
-            next = pos - 13;
+            prev = pos + numBlocks - 1;
+        } else if (pos % 14 == numBlocks - 1) {
+            next = pos - numBlocks - 1;
             prev = pos - 1;
         } else {
             next = pos + 1;

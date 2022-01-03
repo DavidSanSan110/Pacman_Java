@@ -11,7 +11,7 @@ public class Ghost extends GameObject{
     private int counter;
     
     public Ghost(URL iconp, URL iconInmortalp, byte [] a1, byte [] a2, AudioInputStream a1ais, AudioInputStream a2ais) {
-        super(24,24,0,0,(int) Math.floor(Math.random()*(4-1+1)+1));
+        super(216,240,0,0,(int) Math.floor(Math.random()*(4-1+1)+1));
         icon = iconp;
         iconInmortal = iconInmortalp;
         tH = a1;
@@ -118,11 +118,11 @@ public class Ghost extends GameObject{
         int next;
         int prev;
 
-        if (pos % 14 == 0) {
+        if (pos % numBlocks == 0) {
             next = pos + 1;
-            prev = pos + 13;
-        } else if (pos % 14 == 13) {
-            next = pos - 13;
+            prev = pos + numBlocks - 1;
+        } else if (pos % 14 == numBlocks - 1) {
+            next = pos - numBlocks - 1;
             prev = pos - 1;
         } else {
             next = pos + 1;
