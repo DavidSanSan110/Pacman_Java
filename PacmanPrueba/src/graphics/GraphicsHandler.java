@@ -29,10 +29,12 @@ import javax.swing.ImageIcon;
 public class GraphicsHandler extends JPanel implements ActionListener {
     
     private final int BLOCK_SIZE = 24;
-    private final int NUM_BLOCKS = 14;
+    private final int NUM_BLOCKS_X = 19;
+    private final int NUM_BLOCKS_Y = 22;
     private final int MAX_GHOSTS = 3;
     private final int MAX_TOKENS = 4;
-    private final int SCREEN_SIZE = NUM_BLOCKS * BLOCK_SIZE;
+    private final int SCREEN_SIZE_X = NUM_BLOCKS_X * BLOCK_SIZE;
+    private final int SCREEN_SIZE_Y = NUM_BLOCKS_Y * BLOCK_SIZE;
     private Dimension d;
     private Timer timer;
     private boolean inGame;
@@ -44,12 +46,11 @@ public class GraphicsHandler extends JPanel implements ActionListener {
     private URL stop, up, down, left, right, heart, icon, iconInmortal, slpIcon, axsIcon;
     private AudioInputStream bG, fW, pU, tD, tH, wS;
     private byte [] bGb, fWb, pUb, tDb, tHb, wSb;
-    //private int tempDirectionX;
-    //private int tempDirectionY;
     
     
     
     private int screenData[];
+    /*
     private final int mapaData[] = {
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
         0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
@@ -66,17 +67,34 @@ public class GraphicsHandler extends JPanel implements ActionListener {
         0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     };
+    */
+    private final int mapaData[] = {
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, //borde
+        0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, //1 linea v
+        0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, //2 linea
+        0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, //3 linea fb
+        0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, //4 linea v
+        0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, //arriba t
+        0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0, //medio t
+        0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, //abajo t s
+        0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, //debajo t s
+        0, 0, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, //arriba caja s
+        1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, //medio caja 
+        0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, //abajo caja s
+        0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, //debajo caja s
+        0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, //arriba t s
+        0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, //medio t
+        0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0, //abajo t
+        0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0, //debajo t
+        0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, //arriba t
+        0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0, //medio t
+        0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0, //abajo t
+        0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, //debajo t
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+    };
     
     public GraphicsHandler() {
-        /*
-        try {
-            backGroundSound = new URL("https://dl.dropboxusercontent.com/s/asmfqne7crsbmmi/background.wav");
-        } catch (MalformedURLException ex) {
-            System.out.println("Error al cargar imagen");
-        }
-        */
         loadMedia();
-        
         initVariables();
         addKeyListener(new TAdapter());
         setFocusable(true);
@@ -162,16 +180,16 @@ public class GraphicsHandler extends JPanel implements ActionListener {
             ghosts.add(new Ghost(icon, iconInmortal, tHb, tDb, tH, tD));
         }
         
-        screenData = new int[NUM_BLOCKS * NUM_BLOCKS];
+        screenData = new int[NUM_BLOCKS_X * NUM_BLOCKS_Y];
         maxScore = 0;
-        for (i = 0; i < NUM_BLOCKS * NUM_BLOCKS; i++) {
+        for (i = 0; i < NUM_BLOCKS_X * NUM_BLOCKS_Y; i++) {
             screenData[i] = mapaData[i];
             if (screenData[i] == 1) {
                 maxScore++;
                 if (tokens.size() < MAX_TOKENS && (int) Math.floor(Math.random()*(40-1+1)+1) == 17) {
-                    tokens.add(new Slp((i % NUM_BLOCKS * BLOCK_SIZE), i / NUM_BLOCKS * BLOCK_SIZE, slpIcon, pUb, pU));
+                    tokens.add(new Slp((i % NUM_BLOCKS_X * BLOCK_SIZE), i / NUM_BLOCKS_X * BLOCK_SIZE, slpIcon, pUb, pU));
                 } else if (tokens.size() < MAX_TOKENS && (int) Math.floor(Math.random()*(40-1+1)+1) == 16) {
-                    tokens.add(new Axs((i % NUM_BLOCKS * BLOCK_SIZE), i / NUM_BLOCKS * BLOCK_SIZE, axsIcon, pUb, pU));
+                    tokens.add(new Axs((i % NUM_BLOCKS_X * BLOCK_SIZE), i / NUM_BLOCKS_X * BLOCK_SIZE, axsIcon, pUb, pU));
                 }
             } 
         }
@@ -192,7 +210,7 @@ public class GraphicsHandler extends JPanel implements ActionListener {
         
         Graphics2D g2d = (Graphics2D) g;
         g2d.setColor(Color.black);
-        g2d.fillRect(0, 0, 336, 360);
+        g2d.fillRect(0, 0, SCREEN_SIZE_X, SCREEN_SIZE_Y + BLOCK_SIZE);
         
         drawMaze(g2d);
         drawScore(g2d);
@@ -221,11 +239,11 @@ public class GraphicsHandler extends JPanel implements ActionListener {
         
         tokens.removeAll(tokensToRemove);
         
-        pacman.movePacman(screenData, BLOCK_SIZE, NUM_BLOCKS);
+        pacman.movePacman(screenData, BLOCK_SIZE, NUM_BLOCKS_X);
         drawPacman(g2d);
         
         for (Ghost g : ghosts) {
-            g.moveGhost(screenData, BLOCK_SIZE, NUM_BLOCKS, pacman);
+            g.moveGhost(screenData, BLOCK_SIZE, NUM_BLOCKS_X, pacman);
             drawGhost(g2d, g);
         }
         
@@ -250,13 +268,13 @@ public class GraphicsHandler extends JPanel implements ActionListener {
     
     private void reset(){
         
-        pacman.setX(168);
-        pacman.setY(168);
+        pacman.setX(216);
+        pacman.setY(384);
         
         for(Ghost g : ghosts){
             
-            g.setX(24);
-            g.setY(24);
+            g.setX(216);
+            g.setY(240);
             
         }
         
@@ -292,8 +310,8 @@ public class GraphicsHandler extends JPanel implements ActionListener {
     private void drawMaze(Graphics2D g2d) {
         int i = 0;
         int x, y;
-        for (y = 0; y < SCREEN_SIZE; y += BLOCK_SIZE) {
-            for (x = 0; x < SCREEN_SIZE; x += BLOCK_SIZE) {
+        for (y = 0; y < SCREEN_SIZE_Y; y += BLOCK_SIZE) {
+            for (x = 0; x < SCREEN_SIZE_X; x += BLOCK_SIZE) {
                 g2d.setColor(new Color(113,82,186));
                 g2d.setStroke(new BasicStroke(5));
                 
@@ -314,7 +332,7 @@ public class GraphicsHandler extends JPanel implements ActionListener {
         g2d.setColor(new Color(255, 255, 255));
         String score = "Score: " + pacman.getScore();
         //String lives = "Lives: " + pacman.getLives();
-        g2d.drawString(score, SCREEN_SIZE / 2 + 96, SCREEN_SIZE + 16);
+        g2d.drawString(score, SCREEN_SIZE_X / 2 + 96, SCREEN_SIZE_Y + 16);
         //g2d.drawString(lives, SCREEN_SIZE / 10, SCREEN_SIZE + 16);
         
     }   
@@ -325,7 +343,7 @@ public class GraphicsHandler extends JPanel implements ActionListener {
         
         for(i = 0; i < pacman.getLives(); i++){
             
-            g2d.drawImage(new ImageIcon(pacman.getHeart()).getImage(), SCREEN_SIZE / 20 + i * (BLOCK_SIZE / 2), SCREEN_SIZE, this);
+            g2d.drawImage(new ImageIcon(pacman.getHeart()).getImage(), SCREEN_SIZE_X / 20 + i * (BLOCK_SIZE / 2), SCREEN_SIZE_Y, this);
             
         }
              
@@ -335,15 +353,15 @@ public class GraphicsHandler extends JPanel implements ActionListener {
     private void showIntroScreen(Graphics2D g2d) {
         String intro = "PRESS SPACE TO START";
         g2d.setColor(Color.yellow);
-        g2d.drawString(intro, 96, 168);
+        g2d.drawString(intro, SCREEN_SIZE_X / 3, SCREEN_SIZE_Y / 2);
     }
     
     private void showWonScreen(Graphics2D g2d) {
         String won = "LEVEL COMPLETED!!!!";
         String won2 = "PRESS SPACE TO START";
         g2d.setColor(Color.yellow);
-        g2d.drawString(won, 96, 168);
-        g2d.drawString(won2, 96, 192);
+        g2d.drawString(won, SCREEN_SIZE_X / 3, SCREEN_SIZE_Y / 2);
+        g2d.drawString(won2, SCREEN_SIZE_X / 3, SCREEN_SIZE_Y / 2 + BLOCK_SIZE);
     }
 
     class TAdapter implements KeyListener{
